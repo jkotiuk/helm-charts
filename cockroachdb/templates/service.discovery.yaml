@@ -8,6 +8,7 @@ metadata:
   name: {{ template "cockroachdb.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels:
+    prometheus: cockroachdb
     helm.sh/chart: {{ template "cockroachdb.chart" . }}
     app.kubernetes.io/name: {{ template "cockroachdb.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
