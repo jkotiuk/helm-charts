@@ -24,6 +24,7 @@ metadata:
 spec:
   selector:
     matchLabels:
+      prometheus: cockroachdb
       app.kubernetes.io/name: {{ template "cockroachdb.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name | quote }}
     {{- with .Values.service.discovery.labels }}
@@ -43,4 +44,6 @@ spec:
     {{- if $serviceMonitor.scrapeTimeout }}
     scrapeTimeout: {{ $serviceMonitor.scrapeTimeout }}
     {{- end }}
+    tlsConfig:
+      insecureSkipVerify: true
 {{- end }}
