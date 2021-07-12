@@ -1,6 +1,6 @@
 image:
   repository: cockroachdb/cockroach
-  tag: v21.1.0
+  tag: v21.1.5
   pullPolicy: IfNotPresent
   credentials: {}
     # registry: docker.io
@@ -228,6 +228,26 @@ statefulset:
     #   cpu: 100m
     #   memory: 512Mi
 
+  # Custom Liveness probe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-a-liveness-http-request
+  customLivenessProbe: {}
+    # httpGet:
+    #   path: /health
+    #   port: http
+    #   scheme: HTTPS
+    # initialDelaySeconds: 30
+    # periodSeconds: 5
+
+  # Custom Rediness probe
+  # https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
+  customReadinessProbe: {}
+    # httpGet:
+    #   path: /health
+    #   port: http
+    #   scheme: HTTPS
+    # initialDelaySeconds: 30
+    # periodSeconds: 5
+
 service:
   ports:
     # You can set a different external and internal gRPC ports and their name.
@@ -266,7 +286,6 @@ service:
       app.kubernetes.io/component: cockroachdb
     # Additional annotations to apply to this Service.
     annotations: {}
-
 
 # CockroachDB's ingress for web ui.
 ingress:
@@ -371,6 +390,8 @@ init:
     #   # https://www.cockroachlabs.com/docs/stable/create-database.html#parameters
     #   options: [encoding='utf-8']
     #   owners: []
+    #   # Backup schedules are not idemponent for now and will fail on next run
+    #   # https://github.com/cockroachdb/cockroach/issues/57892
     #   backup:
     #     into: s3://
     #     # Enterprise-only option (revision_history)
